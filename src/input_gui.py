@@ -5,7 +5,7 @@ from PySide6 import QtCore, QtWidgets, QtGui
 class MyWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.hello  = ["Hello World", "Ohayou Bitch", "Yee-howdy to ya"]
+        self.hello  = ["Hello World", "Yee-howdy to ya"]
         self.button = QtWidgets.QPushButton("Click me!") 
         self.text   = QtWidgets.QLabel("Hello World", alignment = QtCore.Qt.AlignCenter)
 
