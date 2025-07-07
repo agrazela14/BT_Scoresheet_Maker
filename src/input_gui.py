@@ -7,19 +7,28 @@ from PySide6 import QtGui
 class AppWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-    
+
         self.parent_layout     = QtWidgets.QVBoxLayout(self)
-        self.units_layout      = QtWidgets.QVBoxLayout()
+        self.players_layout    = QtWidgets.QVBoxLayout()
         self.objectives_layout = QtWidgets.QVBoxLayout()
+        self.units_layout      = QtWidgets.QVBoxLayout()
 
-        self.parent_layout.addLayout(self.units_layout)
+        self.parent_layout.addLayout(self.players_layout)
         self.parent_layout.addLayout(self.objectives_layout)
-    # Create the parent widget, including a VBoxLayout that holds the other layouts
-    # addLayout to add a Players, Objectives, Units, Scoring, HBoxLayouts
+        self.parent_layout.addLayout(self.units_layout)
+        # Create the parent widget, including a VBoxLayout that holds the other layouts
+        # addLayout to add a Players, Objectives, Units, Scoring, HBoxLayouts
 
 
-    # Include an Add button to add a new unit, each unit is represented by text boxes
-    # [Unit Name, Unit BV, Unit Skill] for each unit
+       # Include an Add button to add a new unit, each unit is represented by text boxes
+       # [Unit Name, Unit BV, Unit Skill] for each unit
+        self.add_player_button = QtWidgets.QPushButton("Add Player")
+        self.add_player_button.clicked.connect(self.add_player)
+        self.players_layout.addWidget(self.add_player_button)
+
+        self.add_objective_button = QtWidgets.QPushButton("Add Objective")
+        self.add_objective_button.clicked.connect(self.add_objective)
+        self.objectives_layout.addWidget(self.add_objective_button)
 
         self.add_unit_button = QtWidgets.QPushButton("Add Unit")
         self.add_unit_button.clicked.connect(self.add_unit)
@@ -27,15 +36,35 @@ class AppWindow(QtWidgets.QWidget):
 
 
 
-#    def add_objective(QLayout parent): 
-    def add_unit(parent):
+    # TODO: make the Player number a dropdown with numbers
+    def add_player(self): 
+        new_player = QtWidgets.QHBoxLayout()
+
+        new_player.addWidget(QtWidgets.QLineEdit("Player Name"))
+        new_player.addWidget(QtWidgets.QLineEdit("Player Number"))
+        new_player.addWidget(QtWidgets.QLineEdit("Player Faction"))
+
+        self.players_layout.addLayout(new_player)
+
+    def add_objective(self): 
+        new_objective = QtWidgets.QHBoxLayout()
+
+        new_objective.addWidget(QtWidgets.QLineEdit("Objective Name"))
+        new_objective.addWidget(QtWidgets.QLineEdit("Objective type (primary, secondary etc)"))
+        new_objective.addWidget(QtWidgets.QLineEdit("Objective Value"))
+
+        self.objectives_layout.addLayout(new_objective)
+
+    # TODO: make the owning player a dropdown with numbers
+    def add_unit(self):
         new_unit = QtWidgets.QHBoxLayout()
 
+        new_unit.addWidget(QtWidgets.QLineEdit("Owner Number"))
         new_unit.addWidget(QtWidgets.QLineEdit("Unit Name"))
         new_unit.addWidget(QtWidgets.QLineEdit("Unit BV"))
         new_unit.addWidget(QtWidgets.QLineEdit("Unit Skill"))
 
-        parent.units_layout.addLayout(new_unit)
+        self.units_layout.addLayout(new_unit)
         
 
 
