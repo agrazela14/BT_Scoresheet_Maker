@@ -1,28 +1,48 @@
 import sys
 import random
-from PySide6 import QtCore, QtWidgets, QtGui 
+from PySide6 import QtCore
+from PySide6 import QtWidgets
+from PySide6 import QtGui
 
-class MyWidget(QtWidgets.QWidget):
+class AppWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.hello  = ["Hello World", "Yee-howdy to ya"]
-        self.button = QtWidgets.QPushButton("Click me!") 
-        self.text   = QtWidgets.QLabel("Hello World", alignment = QtCore.Qt.AlignCenter)
+    
+        self.parent_layout     = QtWidgets.QVBoxLayout(self)
+        self.units_layout      = QtWidgets.QVBoxLayout()
+        self.objectives_layout = QtWidgets.QVBoxLayout()
 
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.text)
-        self.layout.addWidget(self.button)
+        self.parent_layout.addLayout(self.units_layout)
+        self.parent_layout.addLayout(self.objectives_layout)
+    # Create the parent widget, including a VBoxLayout that holds the other layouts
+    # addLayout to add a Players, Objectives, Units, Scoring, HBoxLayouts
+
+
+    # Include an Add button to add a new unit, each unit is represented by text boxes
+    # [Unit Name, Unit BV, Unit Skill] for each unit
+
+        self.add_unit_button = QtWidgets.QPushButton("Add Unit")
+        self.add_unit_button.clicked.connect(self.add_unit)
+        self.units_layout.addWidget(self.add_unit_button)
+
+
+
+#    def add_objective(QLayout parent): 
+    def add_unit(parent):
+        new_unit = QtWidgets.QHBoxLayout()
+
+        new_unit.addWidget(QtWidgets.QLineEdit("Unit Name"))
+        new_unit.addWidget(QtWidgets.QLineEdit("Unit BV"))
+        new_unit.addWidget(QtWidgets.QLineEdit("Unit Skill"))
+
+        parent.units_layout.addLayout(new_unit)
         
-        self.button.clicked.connect(self.magic)
 
-    @QtCore.Slot()
-    def magic(self):
-        self.text.setText(random.choice(self.hello))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     
-    widget = MyWidget()
+    widget = AppWindow()
     widget.resize(800, 800)
     widget.show()
 
