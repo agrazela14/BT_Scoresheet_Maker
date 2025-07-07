@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 
-class AppWindow(QtWidgets.QWidget):
+class AppGui(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
@@ -107,11 +107,3 @@ class AppWindow(QtWidgets.QWidget):
         print("This will create the pdf based on the inputted data")
         
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    
-    widget = AppWindow()
-    widget.resize(800, 800)
-    widget.show()
-
-    sys.exit(app.exec())
