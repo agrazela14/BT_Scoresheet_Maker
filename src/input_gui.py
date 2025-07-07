@@ -52,7 +52,6 @@ class AppWindow(QtWidgets.QWidget):
 
         player_number_layout.addWidget(QtWidgets.QLabel("Player Number"))
         player_number_layout.addWidget(player_number_counter)
-        #player_number_layout.setSpacing(0)
         player_number_layout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetMinimumSize)
 
         new_player.addWidget(QtWidgets.QLineEdit("Player Name"))
@@ -62,11 +61,18 @@ class AppWindow(QtWidgets.QWidget):
         self.players_layout.addLayout(new_player)
 
     def add_objective(self): 
-        new_objective = QtWidgets.QHBoxLayout()
+        new_objective   = QtWidgets.QHBoxLayout()
+        objective_name  = QtWidgets.QLineEdit()
+        objective_type  = QtWidgets.QLineEdit()
+        objective_value = QtWidgets.QLineEdit()
 
-        new_objective.addWidget(QtWidgets.QLineEdit("Objective Name"))
-        new_objective.addWidget(QtWidgets.QLineEdit("Objective type (primary, secondary etc)"))
-        new_objective.addWidget(QtWidgets.QLineEdit("Objective Value"))
+        objective_name.setPlaceholderText("Objective Name")
+        objective_type.setPlaceholderText("Objective Type (Primary, Secondary, etc...")
+        objective_value.setPlaceholderText("Objective Value")
+
+        new_objective.addWidget(objective_name)
+        new_objective.addWidget(objective_type)
+        new_objective.addWidget(objective_value)
 
         self.objectives_layout.addLayout(new_objective)
 
@@ -75,6 +81,10 @@ class AppWindow(QtWidgets.QWidget):
         new_unit             = QtWidgets.QHBoxLayout()
         owner_number_layout  = QtWidgets.QHBoxLayout()
         owner_number_counter = QtWidgets.QComboBox()
+        unit_name            = QtWidgets.QLineEdit()
+        unit_bv              = QtWidgets.QLineEdit()
+        unit_skill           = QtWidgets.QLineEdit()
+        
 
         owner_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         owner_number_counter.setFrame( True )
@@ -82,9 +92,13 @@ class AppWindow(QtWidgets.QWidget):
         owner_number_layout.addWidget(QtWidgets.QLabel("Owner Number"))
         owner_number_layout.addWidget(owner_number_counter)
 
-        new_unit.addWidget(QtWidgets.QLineEdit("Unit Name"))
-        new_unit.addWidget(QtWidgets.QLineEdit("Unit BV"))
-        new_unit.addWidget(QtWidgets.QLineEdit("Unit Skill"))
+        unit_name.setPlaceholderText("Unit Name")
+        unit_bv.setPlaceholderText("Unit BV")
+        unit_skill.setPlaceholderText("Unit Skill")
+
+        new_unit.addWidget(unit_name)
+        new_unit.addWidget(unit_bv)
+        new_unit.addWidget(unit_skill)
         new_unit.addLayout(owner_number_layout)
 
         self.units_layout.addLayout(new_unit)
