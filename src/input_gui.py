@@ -5,17 +5,32 @@ from PySide6 import QtCore
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 
+# Alternative idea:
+# Extend the QtVBoxLayout for each of the datatypes
+# Parent-Class - contains a VBoxLayout containing each of the following:
+#   Player Class
+#   Objective Class
+#   Unit Class
+#
+#
+# Each of the above classes contains a list of all its data, which it can then pass up to the parent class
+# Add player / objective / unit button is part of the parent
+# Callback function of the add button, located in the parent class, calls a function in the extended Player/Objective/Unit class
+# The called function there adds the new row, as well as the data stored in the child class
+
 @dataclass
 class Player:
     player_name:    str
     player_faction: str 
     player_number:  int
+    index:          int
 
 @dataclass
 class Objective:
     objective_name:  str
     objective_type:  str 
     objective_value: int
+    index:           int
 
 @dataclass
 class Unit:
@@ -23,11 +38,22 @@ class Unit:
     unit_bv:       str 
     unit_gunnery:  int
     unit_piloting: int
+    index:         int
+
+# Tie each entry to a dataclass and store them in the AppGui class itself?
+# I don't love it but might be the easiest way to get the data from here to the pdf maker
 
 class AppGui(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-
+        
+        # Metadata initialization
+        # Add a member of the associated dataclass to these that stores their data when the GUI is interacted with
+        self.player_list    = []
+        self.objective_list = []
+        self.unit_list      = []
+        
+        # Graphical Objects Initialization
         self.parent_layout     = QtWidgets.QVBoxLayout(self)
         self.players_layout    = QtWidgets.QVBoxLayout()
         self.objectives_layout = QtWidgets.QVBoxLayout()
@@ -66,6 +92,8 @@ class AppGui(QtWidgets.QWidget):
         new_player            = QtWidgets.QHBoxLayout()
         player_number_layout  = QtWidgets.QHBoxLayout()
         player_number_counter = QtWidgets.QComboBox()
+        player_name           = QtWidgets.QLineEdit()
+        player_faction        = QtWidgets.QLineEdit()
 
         player_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         player_number_counter.setFrame( True )
@@ -74,8 +102,11 @@ class AppGui(QtWidgets.QWidget):
         player_number_layout.addWidget(player_number_counter)
         player_number_layout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetMinimumSize)
 
-        new_player.addWidget(QtWidgets.QLineEdit("Player Name"))
-        new_player.addWidget(QtWidgets.QLineEdit("Player Faction"))
+        player_name.setPlaceholderText("Player Name")
+        player_faction.setPlaceholderText("Player Faction")
+
+        new_player.addWidget(player_name)
+        new_player.addWidget(player_faction)
         new_player.addLayout(player_number_layout)
 
         self.players_layout.addLayout(new_player)
@@ -106,7 +137,7 @@ class AppGui(QtWidgets.QWidget):
         unit_skill_layout    = QtWidgets.QHBoxLayout()
         unit_gunnery         = QtWidgets.QComboBox()
         unit_piloting        = QtWidgets.QComboBox()
-        
+
 
         owner_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         owner_number_counter.setFrame( True )
@@ -116,18 +147,17 @@ class AppGui(QtWidgets.QWidget):
 
         unit_name.setPlaceholderText("Unit Name")
         unit_bv.setPlaceholderText("Unit BV")
-        
+
         unit_gunnery.addItems(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
         unit_gunnery.setCurrentIndex(4)
 
         unit_piloting.addItems(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
         unit_piloting.setCurrentIndex(5)
-        
+
         unit_skill_layout.addWidget(QtWidgets.QLabel("Gunnery"))
         unit_skill_layout.addWidget(unit_gunnery)
         unit_skill_layout.addWidget(QtWidgets.QLabel("Piloting"))
         unit_skill_layout.addWidget(unit_piloting)
-        
 
         new_unit.addWidget(unit_name)
         new_unit.addWidget(unit_bv)
