@@ -5,18 +5,6 @@ from PySide6 import QtCore
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 
-# Alternative idea:
-# Extend the QtVBoxLayout for each of the datatypes
-# Parent-Class - contains a VBoxLayout containing each of the following:
-#   Player Class
-#   Objective Class
-#   Unit Class
-#
-#
-# Each of the above classes contains a list of all its data, which it can then pass up to the parent class
-# Add player / objective / unit button is part of the parent
-# Callback function of the add button, located in the parent class, calls a function in the extended Player/Objective/Unit class
-# The called function there adds the new row, as well as the data stored in the child class
 
 @dataclass
 class Player:
@@ -39,6 +27,29 @@ class Unit:
     unit_gunnery:  int
     unit_piloting: int
     index:         int
+
+# Alternative idea:
+# Extend the QVBoxLayout for each of the datatypes
+# Parent-Class - contains a VBoxLayout containing each of the following:
+#   Player Class
+#   Objective Class
+#   Unit Class
+#
+#
+# Each of the above classes contains a list of all its data, which it can then pass up to the parent class
+# Add player / objective / unit button is part of the parent
+# Callback function of the add button, located in the parent class, calls a function in the extended Player/Objective/Unit class
+# The called function there adds the new row, as well as the data stored in the child class
+
+class PlayerBox(QtWidgets.QVBoxLayout))
+    # A list of player dataclass objects containing the entered data
+    player_data = []     
+    
+    def __init__(self):
+        super().__init() 
+
+    def PlayerAddCallback():
+        
 
 # Tie each entry to a dataclass and store them in the AppGui class itself?
 # I don't love it but might be the easiest way to get the data from here to the pdf maker
