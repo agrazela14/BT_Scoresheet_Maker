@@ -1,8 +1,28 @@
 import sys
 import random
+from dataclasses import dataclass
 from PySide6 import QtCore
 from PySide6 import QtWidgets
 from PySide6 import QtGui
+
+@dataclass
+class Player:
+    player_name:    str
+    player_faction: str 
+    player_number:  int
+
+@dataclass
+class Objective:
+    objective_name:  str
+    objective_type:  str 
+    objective_value: int
+
+@dataclass
+class Unit:
+    unit_name:     str
+    unit_bv:       str 
+    unit_gunnery:  int
+    unit_piloting: int
 
 class AppGui(QtWidgets.QWidget):
     def __init__(self):
@@ -83,7 +103,9 @@ class AppGui(QtWidgets.QWidget):
         owner_number_counter = QtWidgets.QComboBox()
         unit_name            = QtWidgets.QLineEdit()
         unit_bv              = QtWidgets.QLineEdit()
-        unit_skill           = QtWidgets.QLineEdit()
+        unit_skill_layout    = QtWidgets.QHBoxLayout()
+        unit_gunnery         = QtWidgets.QComboBox()
+        unit_piloting        = QtWidgets.QComboBox()
         
 
         owner_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
@@ -94,15 +116,28 @@ class AppGui(QtWidgets.QWidget):
 
         unit_name.setPlaceholderText("Unit Name")
         unit_bv.setPlaceholderText("Unit BV")
-        unit_skill.setPlaceholderText("Unit Skill")
+        
+        unit_gunnery.addItems(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+        unit_gunnery.setCurrentIndex(4)
+
+        unit_piloting.addItems(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+        unit_piloting.setCurrentIndex(5)
+        
+        unit_skill_layout.addWidget(QtWidgets.QLabel("Gunnery"))
+        unit_skill_layout.addWidget(unit_gunnery)
+        unit_skill_layout.addWidget(QtWidgets.QLabel("Piloting"))
+        unit_skill_layout.addWidget(unit_piloting)
+        
 
         new_unit.addWidget(unit_name)
         new_unit.addWidget(unit_bv)
-        new_unit.addWidget(unit_skill)
+        new_unit.addLayout(unit_skill_layout)
         new_unit.addLayout(owner_number_layout)
 
         self.units_layout.addLayout(new_unit)
 
+    # Return a datastructure containing the information entered in the fields above
+    # Probably a list of dataclasses for each of the items (player, objective, unit)
     def make_pdf(self):
         print("This will create the pdf based on the inputted data")
         
