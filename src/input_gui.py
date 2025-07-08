@@ -7,21 +7,33 @@ from PySide6 import QtGui
 
 
 @dataclass
-class Player:
+class PlayerData:
     player_name:    str
     player_faction: str 
     player_number:  int
     index:          int
+    
+    def __init__(self, 
+                 player_name: str, 
+                 player_faction: str,
+                 player_number: int, 
+                 index: int):
+
+        self.player_name    = player_name
+        self.player_faction = player_faction
+        self.player_number  = player_number
+        self.index          = index 
+        
 
 @dataclass
-class Objective:
+class ObjectiveData:
     objective_name:  str
     objective_type:  str 
     objective_value: int
     index:           int
 
 @dataclass
-class Unit:
+class UnitData:
     unit_name:     str
     unit_bv:       str 
     unit_gunnery:  int
@@ -51,14 +63,14 @@ class PlayerSection():
         self.player_vlayout = QtWidgets.QVBoxLayout() 
         self.player_data    = []
 
-    def AddPlayerCallback():
+    def AddPlayerCallback(self):
         # Called by the parent class's callback, adds the HBox and data to player_vlayout and player_data respectively
         new_player            = QtWidgets.QHBoxLayout()
         player_number_layout  = QtWidgets.QHBoxLayout()
         player_number_counter = QtWidgets.QComboBox()
         player_name           = QtWidgets.QLineEdit()
         player_faction        = QtWidgets.QLineEdit()
-        player_data           = PlayerData()
+        player_data           = PlayerData("", "", 1, len(self.player_data))
 
         player_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         player_number_counter.setFrame( True )
@@ -74,7 +86,7 @@ class PlayerSection():
         new_player.addLayout(player_number_layout)
 
         self.player_vlayout.addLayout(new_player)
-        self.player_data.extend(player_data)
+        self.player_data.append(player_data)
     
     def getPlayerLayout(self):
         return self.player_vlayout
@@ -90,7 +102,7 @@ class AppGui(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         # Graphical Objects Initialization
-        self.parent_layout = QtWidgets.QVBoxLayout()
+        self.parent_layout = QtWidgets.QVBoxLayout(self)
         
         self.players    = PlayerSection()
         #objectives = ObjectiveSection()
