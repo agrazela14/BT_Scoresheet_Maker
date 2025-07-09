@@ -14,10 +14,10 @@ class PlayerData:
     index:          int
     
     def __init__(self, 
-                 player_name: str, 
+                 player_name:    str, 
                  player_faction: str,
-                 player_number: int, 
-                 index: int):
+                 player_number:  int, 
+                 index:          int):
 
         self.player_name    = player_name
         self.player_faction = player_faction
@@ -31,6 +31,16 @@ class ObjectiveData:
     objective_type:  str 
     objective_value: int
     index:           int
+    def __init__(self, 
+                 objective_name:  str, 
+                 objective_type:  str,
+                 objective_value: int, 
+                 index:           int):
+
+        self.objective_name  = objective_name
+        self.objective_type  = objective_type
+        self.objective_value = objective_value
+        self.index           = index 
 
 @dataclass
 class UnitData:
@@ -39,6 +49,18 @@ class UnitData:
     unit_gunnery:  int
     unit_piloting: int
     index:         int
+    def __init__(self, 
+                 unit_name:     str, 
+                 unit_bv:       str,
+                 unit_gunnery:  int, 
+                 unit_piloting: int, 
+                 index:         int):
+
+        self.unit_name     = player_name
+        self.unit_bv       = player_faction
+        self.unit_gunnery  = unit_gunnery 
+        self.unit_piloting = unit_piloting 
+        self.index         = index 
 
 # Alternative idea:
 # Extend the QVBoxLayout for each of the datatypes
