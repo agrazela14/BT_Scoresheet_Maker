@@ -5,6 +5,10 @@ from PySide6 import QtCore
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 
+#TODO: 
+#   Work on getting the data contained in the GUI Fields out to the PDF Reporter
+#   Add a remove entry button to each entry (This would of course also have to remove the underlying data)
+
 @dataclass
 class PlayerData:
     player_name:    str
@@ -63,19 +67,6 @@ class UnitData:
         self.unit_piloting = unit_piloting 
         self.unit_owner    = unit_owner
         self.index         = index 
-
-# Alternative idea:
-# Extend the QVBoxLayout for each of the datatypes
-# Parent-Class - contains a VBoxLayout containing each of the following:
-#   Player Class
-#   Objective Class
-#   Unit Class
-#
-#
-# Each of the above classes contains a list of all its data, which it can then pass up to the parent class
-# Add player / objective / unit button is part of the parent
-# Callback function of the add button, located in the parent class, calls a function in the extended Player/Objective/Unit class
-# The called function there adds the new row, as well as the data stored in the child class
 
 class PlayerSection():
     # A list of player dataclass objects containing the entered data
@@ -239,6 +230,7 @@ class AppGui(QtWidgets.QWidget):
         self.add_player_button.clicked.connect(self.add_player)
         self.add_objective_button.clicked.connect(self.add_objective)
         self.add_unit_button.clicked.connect(self.add_unit)
+        self.amake_pdf_button.clicked.connect(self.make_pdf)
 
     def add_player(self): 
         self.players.AddPlayerCallback()
@@ -248,6 +240,9 @@ class AppGui(QtWidgets.QWidget):
 
     def add_unit(self): 
         self.units.AddUnitCallback()
+
+    def make_pdf(self):
+        
 
     # Return a datastructure containing the information entered in the fields above
     # Probably a list of dataclasses for each of the items (player, objective, unit)
