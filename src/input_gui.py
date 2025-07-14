@@ -238,7 +238,7 @@ class AppGui(QtWidgets.QWidget):
         self.add_player_button.clicked.connect(self.add_player)
         self.add_objective_button.clicked.connect(self.add_objective)
         self.add_unit_button.clicked.connect(self.add_unit)
-        self.amake_pdf_button.clicked.connect(self.make_pdf)
+        self.make_pdf_button.clicked.connect(self.make_pdf)
 
     def add_player(self): 
         self.players.AddPlayerCallback()
@@ -249,18 +249,22 @@ class AppGui(QtWidgets.QWidget):
     def add_unit(self): 
         self.units.AddUnitCallback()
 
+    # Return a datastructure containing the information entered in the fields above
+    # Probably a list of dataclasses for each of the items (player, objective, unit)
+
     def make_pdf(self):
         # Assemble the entry data from the sections and pass it off to a callback in the pdf maker program 
         # Call functions in each of the child objects that return a list of their data
+        builder    = pdf_builder.PdfBuilder()
         players    = self.players.GetPlayerData()
         objectives = self.objectives.GetObjectiveData()
         units      = self.units.GetUnitData()
+        
+        full_data  = [players, objectives, units]
 
         # send a list of lists to the pdf maker in the order of [players, objectives, units]
-        PdfBuilder.build_pdf([players, objectives, units])
+        builder.BuildPdf(full_data)
 
-    # Return a datastructure containing the information entered in the fields above
-    # Probably a list of dataclasses for each of the items (player, objective, unit)
-    def make_pdf(self):
-        print("This will create the pdf based on the inputted data")
-        
+#    def make_pdf(self):
+#        print("This will create the pdf based on the inputted data")
+#        
