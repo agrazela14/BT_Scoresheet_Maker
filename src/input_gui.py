@@ -1,5 +1,4 @@
-import sys
-import random
+import pdf_builder
 from dataclasses import dataclass
 from PySide6 import QtCore
 from PySide6 import QtWidgets
@@ -78,6 +77,9 @@ class PlayerSection():
         self.player_vlayout = QtWidgets.QVBoxLayout() 
         self.player_data    = []
 
+    def GetPlayerData(self):
+        return self.player_data 
+
     def AddPlayerCallback(self):
         # Called by the parent class's callback, adds the HBox and data to player_vlayout and player_data respectively
         new_player            = QtWidgets.QHBoxLayout()
@@ -116,6 +118,9 @@ class ObjectiveSection():
         self.objective_vlayout = QtWidgets.QVBoxLayout() 
         self.objective_data    = []
 
+    def GetObjectiveData(self):
+        return self.objective_data 
+
     # TODO input validation, or do that in the change callback for the QLineEdits
     def AddObjectiveCallback(self):
         # Called by the parent class's callback, adds the HBox and data to objective_vlayout and objective_data respectively
@@ -148,6 +153,9 @@ class UnitSection():
     def __init__(self):
         self.unit_vlayout = QtWidgets.QVBoxLayout() 
         self.unit_data    = []
+
+    def GetUnitData(self):
+        return self.unit_data 
 
     def AddUnitCallback(self):
         # Called by the parent class's callback, adds the HBox and data to unit_vlayout and unit_data respectively
@@ -242,7 +250,14 @@ class AppGui(QtWidgets.QWidget):
         self.units.AddUnitCallback()
 
     def make_pdf(self):
-        
+        # Assemble the entry data from the sections and pass it off to a callback in the pdf maker program 
+        # Call functions in each of the child objects that return a list of their data
+        players    = self.players.GetPlayerData()
+        objectives = self.objectives.GetObjectiveData()
+        units      = self.units.GetUnitData()
+
+        # send a list of lists to the pdf maker in the order of [players, objectives, units]
+        PdfBuilder.build_pdf([players, objectives, units])
 
     # Return a datastructure containing the information entered in the fields above
     # Probably a list of dataclasses for each of the items (player, objective, unit)

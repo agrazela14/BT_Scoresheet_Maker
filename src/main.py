@@ -1,5 +1,5 @@
 import input_gui
-import pdf_maker
+import pdf_builder
 import sys
 import random
 from PySide6 import QtCore
