@@ -1,7 +1,7 @@
 from reportlab.pdfgen        import canvas
 from reportlab.lib.units     import inch
 from reportlab.lib.pagesizes import A4
-import input_gui
+import InputGui
 
 # Process:
 # First determine player count, and horizontally divide the page to give each player even space

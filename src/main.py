@@ -1,5 +1,5 @@
-import input_gui
-import pdf_builder
+import InputGui 
+import PdfBuilder
 import sys
 import random
 from PySide6 import QtCore
@@ -9,7 +9,7 @@ from PySide6 import QtGui
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     
-    widget = input_gui.AppGui()
+    widget = InputGui.InputGui()
     widget.resize(800, 800)
     widget.show()
 

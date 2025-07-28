@@ -1,4 +1,4 @@
-import pdf_builder
+import PdfBuilder 
 from dataclasses import dataclass
 from PySide6 import QtCore
 from PySide6 import QtWidgets
@@ -200,7 +200,7 @@ class UnitSection():
     def getUnitLayout(self):
         return self.unit_vlayout
          
-class AppGui(QtWidgets.QWidget):
+class InputGui(QtWidgets.QWidget):
     parent_layout        : QtWidgets.QVBoxLayout
     players              : PlayerSection
     objectives           : ObjectiveSection
@@ -255,7 +255,7 @@ class AppGui(QtWidgets.QWidget):
     def make_pdf(self):
         # Assemble the entry data from the sections and pass it off to a callback in the pdf maker program 
         # Call functions in each of the child objects that return a list of their data
-        builder    = pdf_builder.PdfBuilder()
+        builder    = PdfBuilder.PdfBuilder()
         players    = self.players.GetPlayerData()
         objectives = self.objectives.GetObjectiveData()
         units      = self.units.GetUnitData()
