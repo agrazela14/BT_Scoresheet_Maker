@@ -26,7 +26,15 @@ class PlayerData:
         self.player_faction = player_faction
         self.player_number  = player_number
         self.index          = index 
+    
+    def set_player_name(self, player_name):
+        self.player_name = player_name
+
+    def set_player_faction(self, player_name):
+        self.player_faction = player_faction
         
+    def set_player_number(self, player_number):
+        self.player_number = player_number
 
 @dataclass
 class ObjectiveData:
@@ -73,14 +81,23 @@ class PlayerSection():
     player_data   : list    
     # holds the HBox layouts which contain the input form
     player_vlayout: QtWidgets.QVBoxLayout 
+    player_count  : int
     
     def __init__(self):
         self.player_vlayout = QtWidgets.QVBoxLayout() 
         self.player_data    = []
+        self.player_count   = 0
 
     def get_player_data(self):
         # Do the populating of the data here
         # Iterate over each member of the VBox and build it into the player data
+        # for each h_box in the player_vlayout
+        for h_box_index in range(0, self.player_count):
+            # for each widget in the h_box, player_name LineEdit, player_faction LineEdit, player_number ComboBox
+            self.player_data[h_box_index].set_player_name( ((QtWidgets.QLineEdit) self.player_vlayout.itemAt(h_box_index).itemAt(0)).text())
+            self.player_data[h_box_index].set_player_faction(self.player_vlayout.itemAt(h_box_index).itemAt(1).text())
+            self.player_data[h_box_index].set_player_number(self.player_vlayout.itemAt(h_box_index).itemAt(2).current_data())
+        
         return self.player_data 
 
     def add_player_callback(self):
@@ -107,6 +124,7 @@ class PlayerSection():
 
         self.player_vlayout.addLayout(new_player)
         self.player_data.append(player_data)
+        self.player_count += 1
     
     def get_player_layout(self):
         return self.player_vlayout
