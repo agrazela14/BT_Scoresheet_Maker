@@ -7,6 +7,7 @@ from PySide6 import QtGui
 #TODO: 
 #   Work on getting the data contained in the GUI Fields out to the PDF Reporter
 #   Add a remove entry button to each entry (This would of course also have to remove the underlying data)
+#   IMPORTANT: Need to add callbacks to fill out the data lists when a box is interacted with, or when make pdf is pressed
 
 @dataclass
 class PlayerData:
@@ -77,10 +78,12 @@ class PlayerSection():
         self.player_vlayout = QtWidgets.QVBoxLayout() 
         self.player_data    = []
 
-    def GetPlayerData(self):
+    def get_player_data(self):
+        # Do the populating of the data here
+        # Iterate over each member of the VBox and build it into the player data
         return self.player_data 
 
-    def AddPlayerCallback(self):
+    def add_player_callback(self):
         # Called by the parent class's callback, adds the HBox and data to player_vlayout and player_data respectively
         new_player            = QtWidgets.QHBoxLayout()
         player_number_layout  = QtWidgets.QHBoxLayout()
@@ -105,7 +108,7 @@ class PlayerSection():
         self.player_vlayout.addLayout(new_player)
         self.player_data.append(player_data)
     
-    def getPlayerLayout(self):
+    def get_player_layout(self):
         return self.player_vlayout
 
 class ObjectiveSection():
@@ -118,11 +121,11 @@ class ObjectiveSection():
         self.objective_vlayout = QtWidgets.QVBoxLayout() 
         self.objective_data    = []
 
-    def GetObjectiveData(self):
+    def get_objective_data(self):
         return self.objective_data 
 
     # TODO input validation, or do that in the change callback for the QLineEdits
-    def AddObjectiveCallback(self):
+    def add_objective_callback(self):
         # Called by the parent class's callback, adds the HBox and data to objective_vlayout and objective_data respectively
         new_objective   = QtWidgets.QHBoxLayout()
         objective_name  = QtWidgets.QLineEdit()
@@ -141,7 +144,7 @@ class ObjectiveSection():
         self.objective_vlayout.addLayout(new_objective)
         self.objective_data.append(objective_data)
 
-    def getObjectiveLayout(self):
+    def get_objective_layout(self):
         return self.objective_vlayout
 
 class UnitSection():
@@ -154,10 +157,10 @@ class UnitSection():
         self.unit_vlayout = QtWidgets.QVBoxLayout() 
         self.unit_data    = []
 
-    def GetUnitData(self):
-        return self.unit_data 
+    def get_unit_data(self):
+        return self.unit_data
 
-    def AddUnitCallback(self):
+    def add_unit_callback(self):
         # Called by the parent class's callback, adds the HBox and data to unit_vlayout and unit_data respectively
         new_unit             = QtWidgets.QHBoxLayout()
         owner_number_layout  = QtWidgets.QHBoxLayout()
@@ -197,7 +200,7 @@ class UnitSection():
         self.unit_vlayout.addLayout(new_unit)
         self.unit_data.append(unit_data)
 
-    def getUnitLayout(self):
+    def get_unit_layout(self):
         return self.unit_vlayout
          
 class InputGui(QtWidgets.QWidget):
@@ -225,13 +228,13 @@ class InputGui(QtWidgets.QWidget):
         self.make_pdf_button      = QtWidgets.QPushButton("Make PDF")
         
         self.parent_layout.addWidget(self.add_player_button) 
-        self.parent_layout.addLayout(self.players.getPlayerLayout()) 
+        self.parent_layout.addLayout(self.players.get_player_layout()) 
 
         self.parent_layout.addWidget(self.add_objective_button) 
-        self.parent_layout.addLayout(self.objectives.getObjectiveLayout()) 
+        self.parent_layout.addLayout(self.objectives.get_objective_layout()) 
 
         self.parent_layout.addWidget(self.add_unit_button) 
-        self.parent_layout.addLayout(self.units.getUnitLayout()) 
+        self.parent_layout.addLayout(self.units.get_unit_layout()) 
 
         self.parent_layout.addWidget(self.make_pdf_button)
         
@@ -241,13 +244,13 @@ class InputGui(QtWidgets.QWidget):
         self.make_pdf_button.clicked.connect(self.make_pdf)
 
     def add_player(self): 
-        self.players.AddPlayerCallback()
+        self.players.add_player_callback()
 
     def add_objective(self): 
-        self.objectives.AddObjectiveCallback()
+        self.objectives.add_objective_callback()
 
     def add_unit(self): 
-        self.units.AddUnitCallback()
+        self.units.add_unit_callback()
 
     # Return a datastructure containing the information entered in the fields above
     # Probably a list of dataclasses for each of the items (player, objective, unit)
@@ -256,14 +259,14 @@ class InputGui(QtWidgets.QWidget):
         # Assemble the entry data from the sections and pass it off to a callback in the pdf maker program 
         # Call functions in each of the child objects that return a list of their data
         builder    = PdfBuilder.PdfBuilder()
-        players    = self.players.GetPlayerData()
-        objectives = self.objectives.GetObjectiveData()
-        units      = self.units.GetUnitData()
-        
+        players    = self.players.get_player_data()
+        objectives = self.objectives.get_objective_data()
+        units      = self.units.get_unit_data()
+
         full_data  = [players, objectives, units]
 
         # send a list of lists to the pdf maker in the order of [players, objectives, units]
-        builder.BuildPdf(full_data)
+        builder.build_pdf(full_data)
 
 #    def make_pdf(self):
 #        print("This will create the pdf based on the inputted data")
