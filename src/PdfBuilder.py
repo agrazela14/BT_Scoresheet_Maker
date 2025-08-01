@@ -62,7 +62,7 @@ class PdfBuilder:
             if (len(player_unit_counts) <= int(unit.unit_owner)):
                 player_unit_counts.append(1)
             else:
-                player_unit_counts[unit.unit_owner] += 1
+                player_unit_counts[int(unit.unit_owner)] += 1
         return player_unit_counts
                 
  
@@ -72,7 +72,7 @@ class PdfBuilder:
         #c.showPage()
         #c.save()
         # Use report lab along with the data put into the class variables to draw the pdf
-        c = canvas.Canvas("Out.pdf", A4)
+        c = canvas.Canvas("out.pdf", A4)
 
         # find the player with the most units
         player_units = self.player_units()
@@ -80,34 +80,35 @@ class PdfBuilder:
         # Give each player an equal section of the width of the 8.5" page
         column_width = inch * (8.5 / len(self.player_data))
         # For each value in each data class, plus 1 for each unit from the player with the most units, give an inch of space
-        row_count    = (11 / ( (len(self.player_data) * 3) + (len(self.objective_data) * 3) + (most_units) ))
+        #row_count    = (11 / ( (len(self.player_data) * 3) + (len(self.objective_data) * 3) + (most_units) ))
         
-        self.draw_players(c, column_width, row_count)
-        self.draw_objectives(c, column_width, row_count) 
-        self.draw_units(c, column_width, row_count, player_units)
+        self.draw_players(c, column_width, 11)
+        self.draw_objectives(c, column_width, 8) 
+        self.draw_units(c, column_width, 5, player_units)
         
         c.showPage()
         c.save()
     
     def draw_players(self, c, column_width, row_count):
         for player in self.player_data:
-            c.drawString( column_width * (int(player.player_number) - 1), row_count, player.player_name) 
-            c.drawString( column_width * (int(player.player_number) - 1), row_count + 1, player.player_faction) 
-            c.drawString( column_width * (int(player.player_number) - 1), row_count + 2, player.player_faction) 
+            c.drawString( column_width * (int(player.player_number) - 1), inch * row_count, player.player_name) 
+            c.drawString( column_width * (int(player.player_number) - 1), inch * (row_count - 1), player.player_faction) 
+            c.drawString( column_width * (int(player.player_number) - 1), inch * (row_count - 2), player.player_number) 
 
 
     def draw_objectives(self, c, column_width, row_count):
         for obj in self.objective_data:
             for x in range(0, len(self.objective_data)):
-                c.drawString( column_width * (x), row_count + 3, obj.objective_name) 
-                c.drawString( column_width * (x), row_count + 4, obj.objective_type) 
-                c.drawString( column_width * (x), row_count + 5, obj.objective_value) 
+                for y in range(0, len(self.player_data)):
+                    c.drawString( y * column_width, inch * row_count, obj.objective_name) 
+                    c.drawString( y * column_width, inch * (row_count - 1), obj.objective_type) 
+                    c.drawString( y * column_width, inch * (row_count - 2), obj.objective_value) 
         
     def draw_units(self, c, column_width, row_count, player_units):
         # Start by just drawing the unit name 
         utilized_units = [0] * len(player_units)
         for unit in self.unit_data:
-            c.drawString( column_width * int(unit.unit_owner), row_count + (6 + utilized_units[int(unit.unit_owner) - 1]), unit.unit_name)
+            c.drawString( column_width * (int(unit.unit_owner) - 1), inch * (row_count - (utilized_units[int(unit.unit_owner) - 1])), unit.unit_name)
             utilized_units[int(unit.unit_owner) - 1] += 1 
            
 
