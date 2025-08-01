@@ -49,11 +49,11 @@ class PdfBuilder:
             print("objective value: "   + obj.objective_value)
 
         for unit in self.unit_data:
-            print(unit.unit_name)
-            print(unit.unit_bv)
-            print(unit.unit_gunnery)
-            print(unit.unit_piloting)
-            print(unit.unit_owner)
+            print("unit name: "     + unit.unit_name)
+            print("unit bv: "       + unit.unit_bv)
+            print("unit gunnery:"   + unit.unit_gunnery)
+            print("unit piloting: " + unit.unit_piloting)
+            print("unit owner: "    + unit.unit_owner)
         
 
     def player_units(self):

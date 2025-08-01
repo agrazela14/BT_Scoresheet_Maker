@@ -109,7 +109,6 @@ class PlayerSection():
                                                self.player_faction_list[entry].text(), 
                                                self.player_number_list[entry].currentText(), 
                                                entry))
-        
         return self.player_data 
 
     def wipe_player_data(self):
@@ -128,16 +127,17 @@ class PlayerSection():
 
         player_number_layout.addWidget(QtWidgets.QLabel("Player Number"))
         player_number_layout.addWidget(player_number_counter)
-        self.player_number_list.append(player_number_counter)
 
         player_name.setPlaceholderText("Player Name")
         player_faction.setPlaceholderText("Player Faction")
-        self.player_name_list.append(player_name)
-        self.player_faction_list.append(player_faction)
 
         new_player.addWidget(player_name)
         new_player.addWidget(player_faction)
         new_player.addLayout(player_number_layout)
+
+        self.player_number_list.append(player_number_counter)
+        self.player_name_list.append(player_name)
+        self.player_faction_list.append(player_faction)
 
         self.player_vlayout.addLayout(new_player)
         self.player_count += 1
@@ -203,18 +203,37 @@ class ObjectiveSection():
 
 class UnitSection():
     # A list of player dataclass objects containing the entered data
-    unit_data   : list    
+    unit_data          : list    
     # holds the HBox layouts which contain the input form
-    unit_vlayout: QtWidgets.QVBoxLayout 
+    unit_vlayout       : QtWidgets.QVBoxLayout 
+    unit_count         : int
+    unit_name_list     : list
+    unit_bv_list       : list
+    unit_gunnery_list  : list
+    unit_piloting_list : list
+    unit_owner_list    : list
     
     def __init__(self):
-        self.unit_vlayout = QtWidgets.QVBoxLayout() 
-        self.unit_data    = []
+        self.unit_vlayout       = QtWidgets.QVBoxLayout() 
+        self.unit_data          = []
+        self.unit_count         = 0 
+        self.unit_name_list     = [] 
+        self.unit_bv_list       = [] 
+        self.unit_gunnery_list  = [] 
+        self.unit_piloting_list = [] 
+        self.unit_owner_list    = [] 
 
     def wipe_unit_data(self):
         self.unit_data = []
 
     def get_unit_data(self):
+        for entry in range(0, self.unit_count):
+            self.unit_data.append(UnitData(self.unit_name_list[entry].text(), 
+                                           self.unit_bv_list[entry].text(), 
+                                           self.unit_gunnery_list[entry].currentText(), 
+                                           self.unit_piloting_list[entry].currentText(), 
+                                           self.unit_owner_list[entry].currentText(), 
+                                           entry))
         return self.unit_data
 
     def add_unit_callback(self):
@@ -227,7 +246,6 @@ class UnitSection():
         unit_skill_layout    = QtWidgets.QHBoxLayout()
         unit_gunnery         = QtWidgets.QComboBox()
         unit_piloting        = QtWidgets.QComboBox()
-        unit_data            = UnitData("", "", 0, 0, 1, len(self.unit_data))
 
         owner_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         owner_number_counter.setFrame( True )
@@ -254,8 +272,14 @@ class UnitSection():
         new_unit.addLayout(unit_skill_layout)
         new_unit.addLayout(owner_number_layout)
 
+        self.unit_name_list.append(unit_name)
+        self.unit_bv_list.append(unit_bv)
+        self.unit_gunnery_list.append(unit_gunnery)
+        self.unit_piloting_list.append(unit_piloting)
+        self.unit_owner_list.append(owner_number_counter)
+
         self.unit_vlayout.addLayout(new_unit)
-        self.unit_data.append(unit_data)
+        self.unit_count += 1
 
     def get_unit_layout(self):
         return self.unit_vlayout
