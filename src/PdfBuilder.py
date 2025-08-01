@@ -25,9 +25,9 @@ class PdfBuilder:
         print("Got to the build pdf function")
         self.data_list = data_list
         self.process_data()
-        self.check_data()
-        #self.draw_pdf()
-        #print("Passed DrawPDF")
+        #self.check_data()
+        self.draw_pdf()
+        print("Passed DrawPDF")
 
     def process_data(self):
         # iterate though the 3 lists in the data_list
@@ -59,53 +59,56 @@ class PdfBuilder:
     def player_units(self):
         player_unit_counts = []
         for unit in self.unit_data:
-            if (player_unit_counts.len() <= unit.unit_owner):
+            if (len(player_unit_counts) <= int(unit.unit_owner)):
                 player_unit_counts.append(1)
             else:
                 player_unit_counts[unit.unit_owner] += 1
         return player_unit_counts
                 
  
-#    def draw_pdf(self):
-#        #more drawing test
-#        #c.drawString(4 * inch, 5 * inch, "Draw Complete, 4 inches in, 5 inches up")
-#        #c.showPage()
-#        #c.save()
-#        # Use report lab along with the data put into the class variables to draw the pdf
-#        c = canvas.Canvas("Out.pdf", A4)
-#
-#        # find the player with the most units
-#        player_units = self.most_units(self)
-#        most_units   = max(player_units)
-#        # Give each player an equal section of the width of the 8.5" page
-#        column_width = inch * (8.5 / self.player_data.len())
-#        # For each value in each data class, plus 1 for each unit from the player with the most units, give an inch of space
-#        row_count   = inch * (11 / ( (self.player_data.len() * 3) + (self.objective_data.len() * 3) + (most_units) )
-#        
-#        self.draw_players(self, c, column_width, row_count)
-#        self.draw_objectives(self, c, column_width, row_count) 
-#        self.draw_units(self, c, column_width, row_count, player_units)
-#    
-#    def draw_players(self, c, column_width, row_count):
-#        for player in self.player_data:
-#            c.drawString( column_width * (player.player_number - 1), row_count, player.player_name) 
-#            c.drawString( column_width * (player.player_number - 1), row_count - 1, player.player_faction) 
-#            c.drawString( column_width * (player.player_number - 1), row_count - 2, player.player_faction) 
-#
-#
-#    def draw_objectives(self, c, column_width, row_count):
-#        for obj in self.objective_data:
-#            for x in range(0, self.player_data.len()):
-#                c.drawString( column_width * (x), row_count - 3, obj.objective_name) 
-#                c.drawString( column_width * (x), row_count - 4, obj.objective_type) 
-#                c.drawString( column_width * (x), row_count - 5, obj.objective_value)) 
-#        
-#    def draw_units(self, c, column_width, row_count, player_units):
-#        # Start by just drawing the unit name 
-#        utilized_units = [0] * player_units.len()
-#        for unit in self.unit_data:
-#            c.drawString( column_width * unit.unit_owner, row_count - (6 + utilized_units[unit.unit_owner - 1]), unit.unit_name)
-#            utilized_units[unit._unit_owner - 1] += 1 
+    def draw_pdf(self):
+        #more drawing test
+        #c.drawString(4 * inch, 5 * inch, "Draw Complete, 4 inches in, 5 inches up")
+        #c.showPage()
+        #c.save()
+        # Use report lab along with the data put into the class variables to draw the pdf
+        c = canvas.Canvas("Out.pdf", A4)
+
+        # find the player with the most units
+        player_units = self.player_units()
+        most_units   = max(player_units)
+        # Give each player an equal section of the width of the 8.5" page
+        column_width = inch * (8.5 / len(self.player_data))
+        # For each value in each data class, plus 1 for each unit from the player with the most units, give an inch of space
+        row_count    = (11 / ( (len(self.player_data) * 3) + (len(self.objective_data) * 3) + (most_units) ))
+        
+        self.draw_players(c, column_width, row_count)
+        self.draw_objectives(c, column_width, row_count) 
+        self.draw_units(c, column_width, row_count, player_units)
+        
+        c.showPage()
+        c.save()
+    
+    def draw_players(self, c, column_width, row_count):
+        for player in self.player_data:
+            c.drawString( column_width * (int(player.player_number) - 1), row_count, player.player_name) 
+            c.drawString( column_width * (int(player.player_number) - 1), row_count + 1, player.player_faction) 
+            c.drawString( column_width * (int(player.player_number) - 1), row_count + 2, player.player_faction) 
+
+
+    def draw_objectives(self, c, column_width, row_count):
+        for obj in self.objective_data:
+            for x in range(0, len(self.objective_data)):
+                c.drawString( column_width * (x), row_count + 3, obj.objective_name) 
+                c.drawString( column_width * (x), row_count + 4, obj.objective_type) 
+                c.drawString( column_width * (x), row_count + 5, obj.objective_value) 
+        
+    def draw_units(self, c, column_width, row_count, player_units):
+        # Start by just drawing the unit name 
+        utilized_units = [0] * len(player_units)
+        for unit in self.unit_data:
+            c.drawString( column_width * int(unit.unit_owner), row_count + (6 + utilized_units[int(unit.unit_owner) - 1]), unit.unit_name)
+            utilized_units[int(unit.unit_owner) - 1] += 1 
            
 
 # reportlab test code
