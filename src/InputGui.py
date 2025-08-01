@@ -53,6 +53,15 @@ class ObjectiveData:
         self.objective_value = objective_value
         self.index           = index 
 
+    def set_objective_name(self, objective_name):
+        self.objective_name = objective_name
+
+    def set_objective_type(self, objective_type):
+        self.objective_type = objective_type
+        
+    def set_objective_value(self, objective_value):
+        self.objective_value = objective_value
+
 @dataclass
 class UnitData:
     unit_name:     str
@@ -78,27 +87,33 @@ class UnitData:
 
 class PlayerSection():
     # A list of player dataclass objects containing the entered data
-    player_data   : list    
+    player_data         : list    
     # holds the HBox layouts which contain the input form
-    player_vlayout: QtWidgets.QVBoxLayout 
-    player_count  : int
+    player_vlayout      : QtWidgets.QVBoxLayout 
+    player_count        : int
+    player_name_list    : list
+    player_faction_list : list
+    player_number_list  : list
     
     def __init__(self):
-        self.player_vlayout = QtWidgets.QVBoxLayout() 
-        self.player_data    = []
-        self.player_count   = 0
+        self.player_vlayout      = QtWidgets.QVBoxLayout() 
+        self.player_data         = []
+        self.player_count        = 0
+        self.player_name_list    = []
+        self.player_faction_list = []
+        self.player_number_list  = []
 
     def get_player_data(self):
-        # Do the populating of the data here
-        # Iterate over each member of the VBox and build it into the player data
-        # for each h_box in the player_vlayout
-        for h_box_index in range(0, self.player_count):
-            # for each widget in the h_box, player_name LineEdit, player_faction LineEdit, player_number ComboBox
-            self.player_data[h_box_index].set_player_name( ((QtWidgets.QLineEdit) self.player_vlayout.itemAt(h_box_index).itemAt(0)).text())
-            self.player_data[h_box_index].set_player_faction(self.player_vlayout.itemAt(h_box_index).itemAt(1).text())
-            self.player_data[h_box_index].set_player_number(self.player_vlayout.itemAt(h_box_index).itemAt(2).current_data())
+        for entry in range(0, self.player_count):
+            self.player_data.append(PlayerData(self.player_name_list[entry].text(), 
+                                               self.player_faction_list[entry].text(), 
+                                               self.player_number_list[entry].currentText(), 
+                                               entry))
         
         return self.player_data 
+
+    def wipe_player_data(self):
+        self.player_data = []
 
     def add_player_callback(self):
         # Called by the parent class's callback, adds the HBox and data to player_vlayout and player_data respectively
@@ -107,23 +122,24 @@ class PlayerSection():
         player_number_counter = QtWidgets.QComboBox()
         player_name           = QtWidgets.QLineEdit()
         player_faction        = QtWidgets.QLineEdit()
-        player_data           = PlayerData("", "", 1, len(self.player_data))
 
         player_number_counter.addItems(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
         player_number_counter.setFrame( True )
 
         player_number_layout.addWidget(QtWidgets.QLabel("Player Number"))
         player_number_layout.addWidget(player_number_counter)
+        self.player_number_list.append(player_number_counter)
 
         player_name.setPlaceholderText("Player Name")
         player_faction.setPlaceholderText("Player Faction")
+        self.player_name_list.append(player_name)
+        self.player_faction_list.append(player_faction)
 
         new_player.addWidget(player_name)
         new_player.addWidget(player_faction)
         new_player.addLayout(player_number_layout)
 
         self.player_vlayout.addLayout(new_player)
-        self.player_data.append(player_data)
         self.player_count += 1
     
     def get_player_layout(self):
@@ -131,16 +147,32 @@ class PlayerSection():
 
 class ObjectiveSection():
     # A list of player dataclass objects containing the entered data
-    objective_data   : list    
+    objective_data         : list    
     # holds the HBox layouts which contain the input form
-    objective_vlayout: QtWidgets.QVBoxLayout 
+    objective_vlayout      : QtWidgets.QVBoxLayout 
+    objective_count        : int
+    objective_name_list    : list
+    objective_type_list    : list
+    objective_value_list   : list
     
     def __init__(self):
-        self.objective_vlayout = QtWidgets.QVBoxLayout() 
-        self.objective_data    = []
+        self.objective_vlayout    = QtWidgets.QVBoxLayout() 
+        self.objective_data       = []
+        self.objective_count      = 0
+        self.objective_name_list  = [] 
+        self.objective_type_list  = [] 
+        self.objective_value_list = [] 
 
     def get_objective_data(self):
+        for entry in range(0, self.objective_count):
+            self.objective_data.append(ObjectiveData(self.objective_name_list[entry].text(), 
+                                                     self.objective_type_list[entry].text(), 
+                                                     self.objective_value_list[entry].text(), 
+                                                     entry))
         return self.objective_data 
+
+    def wipe_objective_data(self):
+        self.objective_data = []
 
     # TODO input validation, or do that in the change callback for the QLineEdits
     def add_objective_callback(self):
@@ -149,7 +181,6 @@ class ObjectiveSection():
         objective_name  = QtWidgets.QLineEdit()
         objective_type  = QtWidgets.QLineEdit()
         objective_value = QtWidgets.QLineEdit()
-        objective_data  = ObjectiveData("", "", 0, len(self.objective_data))
 
         objective_name.setPlaceholderText("Objective Name")
         objective_type.setPlaceholderText("Objective Type (Primary, Secondary, etc...")
@@ -159,8 +190,13 @@ class ObjectiveSection():
         new_objective.addWidget(objective_type)
         new_objective.addWidget(objective_value)
 
+        self.objective_name_list.append(objective_name)
+        self.objective_type_list.append(objective_type)
+        self.objective_value_list.append(objective_value)
+
         self.objective_vlayout.addLayout(new_objective)
-        self.objective_data.append(objective_data)
+
+        self.objective_count += 1
 
     def get_objective_layout(self):
         return self.objective_vlayout
@@ -174,6 +210,9 @@ class UnitSection():
     def __init__(self):
         self.unit_vlayout = QtWidgets.QVBoxLayout() 
         self.unit_data    = []
+
+    def wipe_unit_data(self):
+        self.unit_data = []
 
     def get_unit_data(self):
         return self.unit_data
@@ -220,6 +259,7 @@ class UnitSection():
 
     def get_unit_layout(self):
         return self.unit_vlayout
+
          
 class InputGui(QtWidgets.QWidget):
     parent_layout        : QtWidgets.QVBoxLayout
@@ -286,6 +326,7 @@ class InputGui(QtWidgets.QWidget):
         # send a list of lists to the pdf maker in the order of [players, objectives, units]
         builder.build_pdf(full_data)
 
-#    def make_pdf(self):
-#        print("This will create the pdf based on the inputted data")
-#        
+        # Wipe out the data after sending it, so that it doesn't pile up with repeated makes
+        self.players.wipe_player_data()
+        self.objectives.wipe_objective_data()
+        self.units.wipe_unit_data()

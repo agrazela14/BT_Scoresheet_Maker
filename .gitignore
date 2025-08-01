@@ -1,2 +1,3 @@
 *.pdf
 src/__pycache__/
+*.swp

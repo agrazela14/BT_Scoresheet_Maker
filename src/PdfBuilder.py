@@ -39,14 +39,14 @@ class PdfBuilder:
     def check_data(self):
         print("Checking received data")
         for player in self.player_data:
-            print("player name:" + player.player_name)
+            print("player name:"    + player.player_name)
             print("player faction:" + player.player_faction)
-            print("player number:" + str(player.player_number))
+            print("player number:"  + str(player.player_number))
 
         for obj in self.objective_data:
-            print(obj.objective_name)
-            print(obj.objective_type)
-            print(obj.objective_value)
+            print("objective name: "    + obj.objective_name)
+            print("objective faction: " + obj.objective_type)
+            print("objective value: "   + obj.objective_value)
 
         for unit in self.unit_data:
             print(unit.unit_name)
